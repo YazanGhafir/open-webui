@@ -4,22 +4,25 @@
 
 	import { toast } from 'svelte-sonner';
 
-	import { onMount, getContext, tick } from 'svelte';
+        import { onMount, onDestroy, getContext, tick } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 
 	import { getBackendConfig } from '$lib/apis';
 	import { ldapUserSignIn, getSessionUser, userSignIn, userSignUp } from '$lib/apis/auths';
 
-	import { WEBUI_API_BASE_URL, WEBUI_BASE_URL } from '$lib/constants';
-	import { WEBUI_NAME, config, user, socket } from '$lib/stores';
+        import { WEBUI_API_BASE_URL, WEBUI_BASE_URL } from '$lib/constants';
+        import { WEBUI_NAME, config, user, socket } from '$lib/stores';
+        import { get } from 'svelte/store';
 
 	import { generateInitialsImage, canvasPixelTest } from '$lib/utils';
 
 	import Spinner from '$lib/components/common/Spinner.svelte';
 	import OnBoarding from '$lib/components/OnBoarding.svelte';
 
-	const i18n = getContext('i18n');
+const i18n = getContext('i18n');
+
+        let originalName = get(WEBUI_NAME);
 
 	let loaded = false;
 
@@ -140,11 +143,13 @@
 		}
 	}
 
-	onMount(async () => {
-		if ($user !== undefined) {
-			const redirectPath = querystringValue('redirect') || '/';
-			goto(redirectPath);
-		}
+        onMount(async () => {
+                WEBUI_NAME.set('STIG & Open WebUI');
+
+                if ($user !== undefined) {
+                        const redirectPath = querystringValue('redirect') || '/';
+                        goto(redirectPath);
+                }
 		await checkOauthCallback();
 
 		loaded = true;
@@ -154,8 +159,12 @@
 			await signInHandler();
 		} else {
 			onboarding = $config?.onboarding ?? false;
-		}
-	});
+                }
+        });
+
+        onDestroy(() => {
+                WEBUI_NAME.set(originalName);
+        });
 </script>
 
 <svelte:head>
