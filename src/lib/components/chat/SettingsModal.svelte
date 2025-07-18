@@ -898,6 +898,7 @@
 							toast.success($i18n.t('Settings saved successfully!'));
 						}}
 					/>
+			</div>
 		</div>
 	</div>
 </Modal>
