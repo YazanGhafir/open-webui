@@ -898,7 +898,7 @@
 							toast.success($i18n.t('Settings saved successfully!'));
 						}}
 					/>
-			</div>
+				{/if}
 		</div>
 	</div>
 </Modal>
