@@ -37,9 +37,9 @@
 						<Tooltip content={WEBUI_BUILD_HASH}>
 							v{WEBUI_VERSION}
 						</Tooltip>
-
-                                        </div>
-                                </div>
+					</div>
+				</div>
+			</div>
 		</div>
 
 		{#if ollamaVersion}
